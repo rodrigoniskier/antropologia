@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antropologia Bíblica Reformada</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff; /* Alice Blue */
+            color: #333;
+            display: flex;
+            overflow-x: hidden;
+        }
+        .menu-lateral {
+            width: 250px;
+            background: #2c3e50; /* Dark Blue */
+            color: #ecf0f1;
+            padding: 20px;
+            position: fixed;
+            height: 100%;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+            transition: transform 0.4s ease-in-out;
+            z-index: 1000;
+        }
+        .menu-lateral:hover {
+            transform: translateX(10px);
+        }
+        .menu-lateral h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #ffd700; /* Gold */
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+            transition: color 0.3s ease;
+        }
+        .menu-lateral h2:hover {
+            color: #fffacd; /* Light Yellow */
+        }
+        .menu-lateral button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            background: #3498db; /* Blue */
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .menu-lateral button:hover {
+            background: #2980b9;
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+        .menu-lateral button:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .conteudo-principal {
+            margin-left: 270px;
+            padding: 30px;
+            width: calc(100% - 270px);
+            background: #fff;
+            min-height: 100vh;
+            transition: margin-left 0.4s ease;
+        }
+        .secao {
+            display: none;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease-in-out;
+        }
+        .secao.ativa {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            transition: color 0.3s ease;
+        }
+        h1:hover, h2:hover, h3:hover {
+            color: #2ecc71; /* Green */
+        }
+        h2 {
+            border-bottom: 3px solid #2ecc71; /* Green */
+            padding-bottom: 12px;
+            position: relative;
+        }
+        h2::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            background: #ffd700; /* Yellow */
+            bottom: -3px;
+            left: 0;
+            transition: width 0.4s ease;
+        }
+        h2:hover::after {
+            width: 100%;
+        }
+        .citacao {
+            background: #ecf0f1;
+            padding: 15px;
+            border-left: 6px solid #3498db;
+            margin: 15px 0;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .citacao:hover {
+            background: #d0e8f2;
+            transform: translateX(5px);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            transition: transform 0.3s ease;
+        }
+        table:hover {
+            transform: scale(1.01);
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background: #2ecc71; /* Green */
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        tr:hover {
+            background: #f0fff0; /* Light Green */
+        }
+        .reflexao {
+            font-style: italic;
+            color: #7f8c8d;
+            margin-top: 15px;
+            padding: 15px;
+            background: #fdfd96; /* Light Yellow */
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+        .reflexao:hover {
+            background: #fffacd; /* Lighter Yellow */
+        }
+        .conteudo-extra {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f0fff0; /* Honeydew */
+            border-radius: 8px;
+            border: 2px solid #2ecc71;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.4s ease;
+        }
+        .conteudo-extra.mostrar {
+            display: block;
+            opacity: 1;
+            transform: scale(1);
+        }
+        .botao-mais {
+            background: #f39c12; /* Orange */
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+        }
+        .botao-mais:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+        }
+        @media (max-width: 768px) {
+            .menu-lateral {
+                width: 100%;
+                height: auto;
+                position: relative;
+                transform: translateX(0);
+            }
+            .conteudo-principal {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-lateral">
+        <h2>Menu</h2>
+        <button onclick="mostrarSecao('introducao')">Introdução</button>
+        <button onclick="mostrarSecao('fundamentacao-biblica')">Fundamentação Bíblica</button>
+        <button onclick="mostrarSecao('estrutura-humana')">Estrutura Humana</button>
+        <button onclick="mostrarSecao('queda')">Estado Original e Queda</button>
+        <button onclick="mostrarSecao('redencao')">Implicações Redentivas</button>
+        <button onclick="mostrarSecao('etica-social')">Dimensão Ética e Social</button>
+        <button onclick="mostrarSecao('desafios')">Desafios Contemporâneos</button>
+    </div>
+    <div class="conteudo-principal">
+        <section id="introducao" class="secao ativa">
+            <h1>Antropologia Bíblica na Teologia Sistemática Reformada</h1>
+            <h2>Introdução</h2>
+            <p>A antropologia bíblica, na tradição da teologia sistemática reformada, é o estudo teológico do ser humano à luz da revelação divina nas Escrituras. Este campo abrange a criação do homem, sua queda em pecado, sua redenção em Cristo e seu destino escatológico, oferecendo respostas às questões fundamentais sobre identidade, propósito e condição humana sob a energia de Deus (p. 15). Influenciada por teólogos como João Calvino, Herman Bavinck, Louis Berkhof e os Padrões de Westminster, a antropologia reformada é profundamente cristocêntrica, afirmando que a verdadeira compreensão do homem só é alcançada em relação a Cristo, descrito como "a imagem do Deus invisível" (Colossenses 1:15).</p>
+            <p>O homem é uma criação singular, distinguido por ser feito "à imagem e semelhança de Deus" (Gênesis 1:26-27), mas também radicalmente afetado pelo pecado, incapaz de restaurar-se sem a graça divina (p. 71). Esta tensão entre dignidade original e depravação total é central, rejeitando tanto o otimismo humanista, que exalta a autonomia humana, quanto o pessimismo gnóstico, que desvaloriza a criação material (p. 17). A Confissão de Fé de Westminster (Cap. IV) e os Catecismos Maior e Menor reforçam essa visão, equilibrando a exaltação da criação divina com a gravidade da queda.</p>
+            <p class="citacao">"O conhecimento de Deus e o conhecimento de nós mesmos estão mutuamente conectados; sem um, o outro não pode ser corretamente compreendido." — João Calvino, *Institutas da Religião Cristã* (I.15.1)</p>
+            <p>Calvino sublinha que a antropologia é essencial para a teologia, pois o homem, como portador da imagem de Deus, reflete a glória divina. Bavinck complementa: "O homem é a obra-prima de Deus, criado para ser o portador de Sua imagem e para glorificá-Lo em todas as coisas" (*Dogmática Reformada*, Vol. 2, p. 530). Este estudo, portanto, não apenas explora a natureza humana, mas aponta para a redenção em Cristo como o caminho para a restauração dessa imagem.</p>
+            <p>A tradição reformada também enfatiza a soberania divina em todos os aspectos da existência humana, desde a criação até a consumação final. Herman Dooyeweerd, um filósofo reformado, argumenta que o homem é um ser multidimensional, cujas faculdades (razão, emoção, vontade) operam em harmonia sob a direção divina, um conceito que enriquece a compreensão da imagem de Deus (p. 45).</p>
+            <p class="reflexao">Pergunta para Reflexão: Como a tensão entre a dignidade da imagem de Deus e a corrupção do pecado molda nossa visão do propósito humano?</p>
+            <button class="botao-mais" onclick="mostrarMais('introducao-extra')">Saiba Mais</button>
+            <div id="introducao-extra" class="conteudo-extra">
+                <p>A antropologia reformada se distingue de outras tradições por sua ênfase na incapacidade humana pós-queda e na necessidade absoluta da graça divina. Diferentemente do pelagianismo, que exalta a autonomia humana, ou do semipelagianismo, que sugere uma cooperação entre graça e vontade, a visão reformada insiste que "todos pecaram e carecem da glória de Deus" (Romanos 3:23), sendo a salvação exclusivamente obra da graça soberana (p. 251). Os Cânones de Dort (Art. I) declaram que "o homem, por natureza, é incapaz de querer qualquer bem espiritual ou de merecer a salvação".</p>
+                <p>A Confissão de Westminster (Cap. VI) resume a condição humana: "Nossos primeiros pais, sendo seduzidos pela sutileza e tentação de Satanás, pecaram comendo do fruto proibido... Por esse pecado, eles caíram de sua retidão original e comunhão com Deus, e assim se tornaram mortos em pecado e inteiramente corrompidos em todas as suas faculdades e partes da alma e do corpo."</p>
+                <p>Além disso, a antropologia reformada integra a visão escatológica do homem, destacando que o propósito final da humanidade é a glorificação de Deus, plenamente realizada na nova criação (Apocalipse 21:4-5). Cornelius Van Til, outro pensador reformado, argumenta que o homem só encontra seu verdadeiro significado em sua relação pactual com Deus, uma relação que permeia toda a história redentiva (p. 89).</p>
+            </div>
+        </section>
+
+        <section id="fundamentacao-biblica" class="secao">
+            <h2>Fundamentação Bíblica</h2>
+            <h3>Criação do Homem</h3>
+            <p class="citacao">"Então disse Deus: 'Façamos o homem à nossa imagem, conforme a nossa semelhança; e domine ele sobre os peixes do mar, sobre as aves dos céus, sobre os animais domésticos, sobre toda a terra e sobre todo réptil que se arrasta sobre a terra.' Criou Deus o homem à sua imagem, à imagem de Deus o criou; homem e mulher os criou." — Gênesis 1:26-27</p>
+            <p>A criação do homem é o ponto de partida da antropologia bíblica reformada. A exegese tradicional interpreta a "imagem de Deus" (imago Dei) como um reflexo da natureza divina em atributos relacionais (comunhão com Deus), intelectuais (racionalidade e conhecimento) e morais (santidade e justiça), conforme ensinado por Calvino, Bavinck e Berkhof (p. 23). Essa imagem é estrutural—inerente à natureza humana—e funcional, expressa na vocação de dominar a terra e glorificar a Deus (Gênesis 1:28) (p. 51).</p>
+            <p>Bavinck explica: "A imagem de Deus consiste em que o homem é um ser espiritual, racional, moral, dotado de conhecimento, justiça e santidade, e criado para viver em comunhão com Deus e governar a criação em Seu nome" (*Dogmática Reformada*, Vol. 2, p. 532). A criação do homem como masculino e feminino também reflete a complementaridade e unidade na diversidade, apontando para a Trindade como modelo relacional (p. 54).</p>
+            <p>Teólogos reformados como Francis Turretin destacam que a imagem de Deus inclui a imortalidade da alma e a capacidade de conhecer a Deus, distinguindo o homem do restante da criação (*Institutes of Elenctic Theology*, Vol. 1, p. 447). Esta dignidade original é celebrada em Salmo 8:5-6: "Fizeste-o, no entanto, por um pouco, menor que os anjos, de glória e de honra o coroaste."</p>
+            <h3>A Queda</h3>
+            <p>Gênesis 3 narra a desobediência de Adão e Eva, introduzindo o pecado e suas consequências universais: "Portanto, como por um homem entrou o pecado no mundo, e pelo pecado a morte, assim a morte passou a todos os homens, porquanto todos pecaram" (Romanos 5:12). A queda é um evento histórico, não um mito, e suas implicações são devastadoras, afetando toda a humanidade e a criação (p. 129). A teologia reformada rejeita interpretações alegóricas que minimizem sua gravidade, afirmando sua centralidade para a compreensão da redenção (p. 118).</p>
+            <p class="citacao">"A imagem de Deus foi destruída no homem, e a justiça original foi perdida... O homem agora está destituído de todos os dons celestiais, e é uma massa de iniqüidade e corrupção." — João Calvino, *Institutas* (II.1.5)</p>
+            <p>O Catecismo de Heidelberg (Q. 7) pergunta: "De onde, então, procede esta depravação da natureza humana?" E responde: "Da queda e desobediência de nossos primeiros pais, Adão e Eva, no Paraíso; donde nossa natureza se tornou tão corrompida que todos nós somos concebidos e nascidos em pecado." Esta corrupção é total, afetando mente, vontade e emoções (p. 133).</p>
+            <p class="reflexao">Pergunta para Reflexão: Como a historicidade da queda impacta nossa compreensão da necessidade da redenção?</p>
+            <button class="botao-mais" onclick="mostrarMais('fundamentacao-extra')">Saiba Mais</button>
+            <div id="fundamentacao-extra" class="conteudo-extra">
+                <p>A narrativa da criação em Gênesis 1-2 estabelece a dignidade ontológica do homem como reflexo de Deus, enquanto Gênesis 3 revela a profundidade de sua corrupção moral e espiritual. Louis Berkhof argumenta que, embora danificada, a imagem de Deus não foi obliterada, servindo como base para a possibilidade da redenção (p. 165). Passagens como Romanos 1:21-23 descrevem a troca da glória de Deus por ídolos, evidenciando a idolatria como consequência direta da queda.</p>
+                <p>Berkhof escreve: "A imagem de Deus no homem, em seu sentido mais amplo, inclui tanto a natureza espiritual e imortal do homem quanto suas capacidades intelectuais e morais... Após a queda, esta imagem foi corrompida, mas não aniquilada" (*Teologia Sistemática*, p. 202). A criação geme sob o peso do pecado (Romanos 8:20-22), mas a promessa de restauração permeia as Escrituras (Isaías 11:6-9).</p>
+                <p>Além disso, a queda introduziu a morte como "o salário do pecado" (Romanos 6:23), mas também abriu caminho para a graça, pois "onde abundou o pecado, superabundou a graça" (Romanos 5:20). A exegese reformada destaca a continuidade entre o Antigo e o Novo Testamento, vendo a queda como o prelúdio necessário à revelação plena da redenção em Cristo.</p>
+            </div>
+        </section>
+
+        <section id="estrutura-humana" class="secao">
+            <h2>Estrutura do Ser Humano</h2>
+            <h3>Dicotomismo vs. Tricotomismo</h3>
+            <p>A teologia reformada geralmente adota o dicotomismo, entendendo o homem como composto de corpo (material) e alma-espírito (imaterial), em oposição ao tricotomismo, que separa corpo, alma e espírito como entidades distintas (p. 42). Calvino e Berkhof argumentam que a alma engloba todas as faculdades espirituais—intelecto, vontade e emoções—unidas em uma essência imortal, rejeitando divisões especulativas (p. 44).</p>
+            <p class="citacao">"A alma é uma substância imortal, não uma qualidade ou um acidente... Ela é a sede da inteligência, da vontade e de todas as faculdades que distinguem o homem dos animais irracionais." — João Calvino, *Institutas* (I.15.2)</p>
+            <p>Passagens como Mateus 10:28 ("Não temais os que matam o corpo, mas não podem matar a alma") e Eclesiastes 12:7 ("O pó volte à terra, como era, e o espírito volte a Deus, que o deu") sustentam essa visão. A unidade psicossomática do homem é enfatizada, destacando a interdependência de corpo e alma, culminando na ressurreição (1 Coríntios 15:42-44) (p. 47).</p>
+            <h3>Imagem e Semelhança de Deus</h3>
+            <p>A imago Dei abrange aspectos estruturais (faculdades inatas como razão e moralidade) e funcionais (o chamado a refletir Deus na criação). Após a queda, a imagem foi distorcida, mas não destruída, sendo restaurada progressivamente em Cristo (Colossenses 3:10; Efésios 4:24). Bavinck destaca que a imagem integra a ontologia e a teleologia do homem, unindo sua natureza e propósito (p. 85).</p>
+            <p>Bavinck afirma: "A imagem de Deus não é algo que o homem tem, mas algo que o homem é... É a totalidade do homem em sua relação com Deus" (*Dogmática Reformada*, Vol. 2, p. 554). Esta visão contrasta com interpretações reducionistas que limitam a imagem a um único atributo, como a razão ou a liberdade.</p>
+            <p>Anthony Hoekema, em *Criados à Imagem de Deus*, argumenta que a imagem de Deus é dinâmica, crescendo em conformidade com Cristo à medida que o crente é santificado (p. 92). Essa restauração é tanto um dom presente quanto uma promessa futura, plenamente realizada na glorificação.</p>
+            <p class="reflexao">Pergunta para Reflexão: Como a corrupção da imagem de Deus afeta a capacidade humana de conhecer a verdade e buscar o bem?</p>
+            <button class="botao-mais" onclick="mostrarMais('estrutura-extra')">Saiba Mais</button>
+            <div id="estrutura-extra" class="conteudo-extra">
+                <p>A discussão entre dicotomismo e tricotomismo tem raízes exegéticas e filosóficas. Versículos como 1 Tessalonicenses 5:23 ("espírito, alma e corpo") são vistos pelos dicotomistas como uma ênfase estilística, não uma divisão ontológica (p. 43). A imortalidade da alma, afirmada em Mateus 10:28, distingue o homem dos animais, enquanto sua corporeidade o conecta à criação, um equilíbrio manifesto na ressurreição do corpo (1 Coríntios 15:42-44).</p>
+                <p>Berkhof explica: "A Bíblia não faz uma distinção clara entre alma e espírito... Em muitas passagens, os termos são usados interchangeably" (*Teologia Sistemática*, p. 191). Além disso, a unidade do homem reflete a encarnação de Cristo, que assumiu a natureza humana completa—corpo e alma—para redimi-la integralmente (Hebreus 2:17).</p>
+                <p>A visão reformada também rejeita o materialismo, que reduz o homem a mera matéria, e o dualismo gnóstico, que despreza o corpo. A criação do homem como uma unidade psicofísica sublinha a bondade da criação material e sua redenção final (p. 49).</p>
+            </div>
+        </section>
+
+        <section id="queda" class="secao">
+            <h2>Estado Original, Queda e Consequências</h2>
+            <h3>Condição Original do Homem</h3>
+            <p>O homem foi criado em um estado de integridade, com justiça, santidade e conhecimento verdadeiros (Efésios 4:24; Colossenses 3:10). A Confissão de Westminster (Cap. IV) afirma que Adão e Eva possuíam "almas racionais e imortais", vivendo em perfeita comunhão com Deus no Éden (p. 70). Este estado era condicional, sob o pacto de obras, no qual a obediência garantiria vida eterna, e a desobediência, a morte (p. 86).</p>
+            <p class="citacao">"Adão foi dotado de retidão e santidade... Ele tinha a capacidade de continuar na integridade em que foi criado, mas também a possibilidade de abandoná-la." — João Calvino, *Institutas* (I.15.8)</p>
+            <p>O Catecismo Maior de Westminster (Q. 17) detalha: "Deus criou o homem com conhecimento em seu entendimento, retidão em sua vontade e santidade em seus afetos, para que vivesse para a glória de Deus." Esta harmonia original refletia a perfeição do Criador, mas era contingente à fidelidade humana (p. 88).</p>
+            <h3>Doutrina da Queda</h3>
+            <p>A queda, registrada em Gênesis 3, foi um ato histórico de desobediência que resultou na perda da justiça original e na corrupção total da natureza humana (p. 129). Os Cânones de Dort (I.1) declaram: "Todos os homens são concebidos em pecado e nascem filhos da ira, incapazes de qualquer bem salvífico ou de se voltarem para Deus por si mesmos." Romanos 5:12-19 estabelece a imputação do pecado de Adão a toda a humanidade, enquanto Gênesis 3:16-19 detalha as maldições resultantes: morte, sofrimento e alienação (p. 130).</p>
+            <p>Bavinck observa: "O pecado não é uma substância, mas uma privação... É a perda da retidão original e a corrupção da natureza humana, uma doença espiritual que afeta todo o ser" (*Dogmática Reformada*, Vol. 3, p. 23). Esta corrupção é universal e herdada, não apenas imitativa, conforme ensina Agostinho e reafirmado pela tradição reformada.</p>
+            <p>A queda também introduziu a inimizade entre o homem e Deus, a humanidade entre si (Gênesis 4:8), e o homem e a criação (Gênesis 3:17-18). Charles Hodge, em *Teologia Sistemática* (Vol. 2, p. 192), destaca que "o pecado de Adão foi um ato representativo, afetando toda a sua posteridade por imputação divina".</p>
+            <p class="reflexao">Pergunta para Reflexão: Como a doutrina da imputação do pecado de Adão reconcilia a justiça divina com a universalidade da culpa?</p>
+            <button class="botao-mais" onclick="mostrarMais('queda-extra')">Saiba Mais</button>
+            <div id="queda-extra" class="conteudo-extra">
+                <p>A teologia reformada enfatiza a solidariedade federal entre Adão e sua descendência, conhecida como "representação federal". Assim como Cristo, o segundo Adão, representa os eleitos na redenção (Romanos 5:18-19), o primeiro Adão representou a humanidade na queda (p. 111). Turretin argumenta: "O pecado de Adão é imputado a nós não apenas por propagação natural, mas por representação pactual, pois ele era o cabeça federal de toda a raça humana" (*Institutes*, Vol. 1, p. 612).</p>
+                <p>Esta doutrina refuta visões que atribuem a culpa apenas a atos individuais, destacando o pecado original como uma condição herdada (p. 145). O Catecismo Menor de Westminster (Q. 19) pergunta: "Que miséria veio sobre a humanidade pela queda?" E responde: "Perdemos a comunhão com Deus, caímos sob Sua ira e maldição, e ficamos sujeitos a todas as misérias desta vida, à morte, e às dores do inferno para sempre."</p>
+                <p>A queda também tem implicações cósmicas, pois a criação foi "sujeita à vaidade" (Romanos 8:20). Teólogos como G. C. Berkouwer argumentam que a redenção de Cristo não apenas restaura o homem, mas também a criação, cumprindo a promessa de "novos céus e nova terra" (2 Pedro 3:13) (p. 152).</p>
+            </div>
+        </section>
+
+        <section id="redencao" class="secao">
+            <h2>Implicações Cristológicas e Redentivas</h2>
+            <h3>Relação com Cristo</h3>
+            <p>Cristo, "a imagem do Deus invisível" (Colossenses 1:15), é o arquétipo da humanidade restaurada. Romanos 8:29 revela o propósito divino de conformar os crentes à imagem de Seu Filho, enquanto a encarnação une divindade e humanidade, permitindo que Cristo cumpra o pacto de obras onde Adão falhou (p. 175). Hebreus 2:17 afirma que Ele "se tornou semelhante aos seus irmãos em todas as coisas", qualificando-O como o Mediador perfeito.</p>
+            <p class="citacao">"Cristo é o segundo Adão, o cabeça de uma nova humanidade, que restaura a imagem de Deus em nós através de Sua obra redentora." — Herman Bavinck, *Dogmática Reformada* (Vol. 3, p. 293)</p>
+            <p>A tipologia entre Adão e Cristo é central: enquanto Adão trouxe morte, Cristo trouxe vida (1 Coríntios 15:22). A obediência de Cristo (Filipenses 2:8) contrasta com a desobediência de Adão, oferecendo justificação e santidade aos eleitos. John Murray, em *Redenção Consumada e Aplicada*, destaca que "a obra de Cristo é a base da restauração da imagem de Deus" (p. 181).</p>
+            <h3>Homem em Cristo</h3>
+            <p>A redenção abrange regeneração (novo nascimento, João 3:3-5), justificação (declaração de justiça, Romanos 5:1), santificação (crescimento em santidade, 1 Tessalonicenses 4:3) e glorificação (perfeição final, 1 Coríntios 15:49). A Confissão Belga (Art. 22) ensina que, pela fé, os crentes participam de Cristo e de Seus benefícios, sendo unidos a Ele como membros de Seu corpo (p. 289).</p>
+            <p>Calvino escreve: "A justificação é o principal artigo da fé cristã... É pela fé que recebemos a Cristo e todos os Seus benefícios" (*Institutas*, III.11.1). Este processo restaura a comunhão perdida, capacitando o homem a viver para a glória de Deus, como em seu estado original.</p>
+            <p>A glorificação, conforme 1 João 3:2 ("Seremos semelhantes a Ele, pois O veremos como Ele é"), é o clímax da redenção, quando a imagem de Deus será plenamente restaurada. Geerhardus Vos, em *Teologia Bíblica*, argumenta que a redenção é escatológica, apontando para a consumação do Reino (p. 295).</p>
+            <p class="reflexao">Pergunta para Reflexão: De que forma a união com Cristo redefine a identidade humana em relação ao pecado e à glória?</p>
+            <button class="botao-mais" onclick="mostrarMais('redencao-extra')">Saiba Mais</button>
+            <div id="redencao-extra" class="conteudo-extra">
+                <p>O pacto da redenção, estabelecido entre o Pai e o Filho antes da fundação do mundo (Efésios 1:4), assegura a salvação dos eleitos. A obra de Cristo inclui expiação pelos pecados (1 João 2:2), ressurreição como primícias (1 Coríntios 15:20) e intercessão contínua (Hebreus 7:25). Berkhof resume: "A salvação é um processo que começa com a regeneração, continua com a conversão e a santificação, e culmina na glorificação" (*Teologia Sistemática*, p. 417).</p>
+                <p>A regeneração é obra do Espírito Santo, que renova a vontade e o coração (Tito 3:5). A justificação é um ato judicial de Deus, imputando a justiça de Cristo ao pecador (2 Coríntios 5:21). A santificação é progressiva, envolvendo a mortificação do pecado e a vivificação em santidade (Romanos 6:11-13). J. I. Packer, em *Conhecendo Deus*, destaca que "a redenção nos chama a viver como filhos de Deus, refletindo Sua santidade" (p. 302).</p>
+                <p>A redenção também tem implicações comunitárias, pois os redimidos formam o povo de Deus (1 Pedro 2:9-10). A igreja, como corpo de Cristo, é o contexto onde a imagem de Deus é restaurada coletivamente, antecipando a nova Jerusalém (Apocalipse 21:2-3).</p>
+            </div>
+        </section>
+
+        <section id="etica-social" class="secao">
+            <h2>Dimensão Ética, Social e Vocacional</h2>
+            <h3>Mandato Cultural</h3>
+            <p>O mandato cultural (Gênesis 1:28) ordena ao homem subjugar a terra e exercer domínio sobre a criação, refletindo a glória de Deus em todas as esferas da vida—arte, ciência, política, trabalho e família (p. 73). Após a queda, este chamado foi redirecionado pela redenção para os propósitos do Reino, tornando o trabalho humano um ato de culto (Colossenses 3:23-24) (p. 424).</p>
+            <p class="citacao">"Não há uma polegada quadrada em todo o domínio da existência humana sobre a qual Cristo, que é soberano sobre tudo, não clame: 'É meu!'" — Abraham Kuyper, *Calvinismo* (p. 31)</p>
+            <p>A visão reformada, articulada por Kuyper, rejeita a dicotomia entre sagrado e secular, afirmando que toda vocação é sagrada quando realizada para Deus. Bavinck complementa: "A vocação cristã não é apenas para a igreja, mas para o mundo; não apenas para a alma, mas para o corpo; não apenas para o espiritual, mas para o material" (*Dogmática Reformada*, Vol. 4, p. 437).</p>
+            <h3>Responsabilidade Social</h3>
+            <p>A dignidade humana como imagem de Deus fundamenta a ética social reformada, promovendo justiça (Miquéias 6:8), cuidado com os pobres (Deuteronômio 15:11) e a santidade da sexualidade no casamento (Hebreus 13:4). A vocação cristã abrange família, igreja e sociedade, integrando fé e prática (Romanos 12:1-2) (p. 404). A Confissão de Westminster (Cap. XIX) conecta a lei moral de Deus à vida cotidiana, guiando as relações humanas.</p>
+            <p>Teólogos como Richard Mouw argumentam que a responsabilidade social flui da redenção, chamando os cristãos a serem sal e luz (Mateus 5:13-16). A justiça social, na visão reformada, é teocêntrica, buscando alinhar as estruturas humanas com os princípios do Reino (p. 415).</p>
+            <p>A sexualidade, como parte da criação, é afirmada como um dom divino no contexto do pacto matrimonial, rejeitando tanto a licenciosidade quanto o ascetismo. Herman Dooyeweerd destaca que a ética reformada é normativa, derivada das Escrituras e aplicável a todas as esferas da vida (p. 428).</p>
+            <p class="reflexao">Pergunta para Reflexão: Como o mandato cultural pode orientar os cristãos em questões éticas modernas, como justiça social, tecnologia e sustentabilidade?</p>
+            <button class="botao-mais" onclick="mostrarMais('etica-extra')">Saiba Mais</button>
+            <div id="etica-extra" class="conteudo-extra">
+                <p>A doutrina da "soberania das esferas" de Kuyper afirma que cada área da vida—família, governo, igreja, arte—possui uma autoridade derivada de Deus, mas distinta, promovendo uma visão holística da vocação (p. 428). Isso implica um chamado ativo para transformar a cultura, como sal e luz, sem cair no triunfalismo ou no isolacionismo.</p>
+                <p>Kuyper escreve: "O calvinismo não é apenas uma teologia, mas uma cosmovisão que abrange toda a vida humana e todas as esferas da sociedade" (*Calvinismo*, p. 99). Esta perspectiva encoraja os cristãos a engajarem-se em questões como pobreza, educação e meio ambiente, refletindo o senhorio de Cristo.</p>
+                <p>A ética reformada também aborda a família como uma instituição divina (Efésios 5:22-6:4), a igreja como uma comunidade pactual (Atos 2:42-47), e a sociedade como um campo missionário. Timothy Keller, em *Ministérios de Misericórdia*, argumenta que a compaixão pelos necessitados é um reflexo da graça recebida, integrando ética e evangelho (p. 435).</p>
+            </div>
+        </section>
+
+        <section id="desafios" class="secao">
+            <h2>Desafios Contemporâneos</h2>
+            <h3>Pós-modernidade e Relativismo</h3>
+            <p>A pós-modernidade desafia a antropologia reformada com seu relativismo ético e rejeição da verdade absoluta, questionando a identidade humana como fixa ou divinamente ordenada. A resposta reformada reafirma a autoridade das Escrituras como fundamento objetivo para a moralidade e a antropologia, contrastando com a fluidez contemporânea (p. 169).</p>
+            <p class="citacao">"Em um mundo pós-moderno que questiona a possibilidade de conhecimento objetivo, a teologia reformada insiste na realidade de uma verdade revelada que transcende culturas e épocas." — Kevin Vanhoozer, *A Dramática da Doutrina* (p. 25)</p>
+            <p>A visão reformada sustenta que a identidade humana é teologicamente definida—criada por Deus, caída em pecado, redimida em Cristo—rejeitando narrativas autoconstruídas. Alasdair MacIntyre, embora não reformado, ecoa essa crítica ao relativismo em *After Virtue*, apontando a perda de um telos moral na modernidade (p. 172).</p>
+            <h3>Bioética e Identidade de Gênero</h3>
+            <p>Questões contemporâneas como bioética (aborto, eutanásia, clonagem) e identidade de gênero são abordadas à luz da criação divina. A visão reformada defende a santidade da vida como um dom de Deus (Salmo 139:13-16) e a ordem binária de gênero (Gênesis 1:27), rejeitando perspectivas utilitaristas ou autonomistas que priorizam a autodeterminação (p. 436).</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Questão</th>
+                        <th>Visão Reformada</th>
+                        <th>Perspectivas Seculares</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Bioética</td>
+                        <td>Vida como sagrada, sob a soberania de Deus.</td>
+                        <td>Autonomia individual e utilitarismo prevalecem.</td>
+                    </tr>
+                    <tr>
+                        <td>Identidade de Gênero</td>
+                        <td>Criação binária (homem e mulher) como ordem divina.</td>
+                        <td>Fluidez de gênero e autodeterminação como direitos.</td>
+                    </tr>
+                    <tr>
+                        <td>Transumanismo</td>
+                        <td>Restauração divina da imagem de Deus, não tecnológica.</td>
+                        <td>Evolução humana por meio da tecnologia.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>Wayne Grudem, em *Systematic Theology*, argumenta que a criação define os limites éticos, enquanto o secularismo os dissolve em nome da liberdade (p. 441). A resposta reformada busca dialogar com a cultura sem comprometer os princípios bíblicos.</p>
+            <p class="reflexao">Pergunta para Reflexão: Como a antropologia reformada pode oferecer uma resposta coerente ao transumanismo e à inteligência artificial?</p>
+            <button class="botao-mais" onclick="mostrarMais('desafios-extra')">Saiba Mais</button>
+            <div id="desafios-extra" class="conteudo-extra">
+                <p>O transumanismo, que busca transcender a humanidade por meio da tecnologia, é confrontado pela visão reformada, que reafirma a dependência do homem de Deus e a singularidade da imago Dei. Bavinck argumenta: "A tecnologia pode ser uma bênção, mas nunca substituirá a obra redentora de Deus na restauração da imagem divina" (*Dogmática Reformada*, Vol. 2, p. 566). A inteligência artificial, por sua vez, carece da capacidade de comunhão com Deus, uma marca distintiva do homem (p. 241).</p>
+                <p>Teólogos como R. C. Sproul destacam que o transumanismo reflete o desejo edênico de "ser como Deus" (Gênesis 3:5), uma ilusão que ignora a queda. A antropologia reformada propõe que a verdadeira transformação ocorre pelo Espírito Santo, não por engenharia humana (p. 245).</p>
+                <p>Além disso, questões como edição genética e reprodução artificial desafiam a soberania divina sobre a vida. A visão reformada apela a passagens como Jeremias 1:5 ("Antes que te formasse no ventre, te conheci") para afirmar o valor intrínseco de cada ser humano, independentemente de intervenções tecnológicas (p. 448).</p>
+            </div>
+        </section>
+    </div>
+    <footer style="text-align: center; padding: 15px; background: #2c3e50; color: #ecf0f1; box-shadow: 0 -2px 10px rgba(0,0,0,0.2);">
+        <p>© 2025 - Todos os direitos reservados.</p>
+        <p><a href="Paulo_Anglada_Imago_Dei_Antropologia_250118_080344.pdf" target="_blank" style="color: #ffd700; transition: color 0.3s ease;">Leia o PDF completo</a></p>
+        <p>Desenvolvido por Rodrigo Niskier e Grok 3</p>
+    </footer>
+    <script>
+        function mostrarSecao(id) {
+            const secoes = document.querySelectorAll('.secao');
+            secoes.forEach(secao => {
+                secao.classList.remove('ativa');
+            });
+            setTimeout(() => {
+                const secaoAtiva = document.getElementById(id);
+                secaoAtiva.classList.add('ativa');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 300);
+        }
+
+        function mostrarMais(id) {
+            const elemento = document.getElementById(id);
+            elemento.classList.toggle('mostrar');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('introducao').classList.add('ativa');
+        });
+    </script>
+</body>
+</html>
